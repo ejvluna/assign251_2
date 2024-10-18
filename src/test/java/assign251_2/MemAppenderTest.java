@@ -60,18 +60,21 @@ public class MemAppenderTest {
     public void testMaxSizeAndLogRotation() {
         // Use dependency injection constructor to create the MemAppender instance
         MemAppender appender = new MemAppender("TestAppender", null, PatternLayout.createDefaultLayout(), null);
+        // Set the maximum size of the log events
         appender.setMaxSize(3);
-        
+        // Loop to append 5 log events
         for (int i = 0; i < 5; i++) {
             appender.append(Log4jLogEvent.newBuilder()
                 .setMessage(new SimpleMessage("Message " + i))
                 .build());
         }
-        
+        // Get the current logs
         List<LogEvent> logs = appender.getCurrentLogs();
+        // Check the logs match the expected values
         assertEquals(3, logs.size(), "Should only keep 3 logs due to maxSize");
         assertEquals("Message 2", logs.get(0).getMessage().getFormattedMessage());
         assertEquals("Message 4", logs.get(2).getMessage().getFormattedMessage());
+        // Check the number of discarded logs
         assertEquals(2, appender.getDiscardedLogCount(), "Should have discarded 2 logs");
     }
 
