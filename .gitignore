@@ -1,0 +1,14 @@
+# Maven target directory
+/target/
+
+# VS Code specific files
+.vscode/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
