@@ -40,7 +40,6 @@ public class MemAppender extends AbstractAppender {
 
     // A variable to store the layout of the MemAppender
     private Layout<? extends Serializable> layout;
-    
 
     protected MemAppender(String name, Filter filter, Layout<? extends Serializable> layout, List<LogEvent> logEventsList) {
         super(name, filter, layout);
