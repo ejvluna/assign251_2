@@ -40,7 +40,7 @@ public class MemAppender extends AbstractAppender {
 
     // A variable to store the layout of the MemAppender
     private Layout<? extends Serializable> layout;
-
+    
 
     /* 
     // REQUIRED Constructor to initialize the MemAppender (supports dependency injection)
