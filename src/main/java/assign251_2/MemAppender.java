@@ -42,32 +42,6 @@ public class MemAppender extends AbstractAppender {
     private Layout<? extends Serializable> layout;
     
 
-    /* 
-    // REQUIRED Constructor to initialize the MemAppender (supports dependency injection)
-    protected MemAppender(String name, Filter filter, PatternLayout layout, List<LogEvent> logEventsList) {
-        super(name, filter, layout);
-        this.logEvents = logEventsList != null ? logEventsList : new ArrayList<>();
-    }
-
-    // Factory method to create and return the singleton instance of MemAppender
-    @PluginFactory
-    public static MemAppender createAppender(
-            @PluginAttribute("name") String name,
-            @PluginElement("Layout") PatternLayout layout,
-            @PluginElement("Filter") final Filter filter) {
-        if (instance == null) {
-            instance = new MemAppender(name, filter, layout, null);
-        }
-        return instance;
-    }
-
-    // REQUIRED Method to set the layout of the MemAppender
-    public void setLayout(Layout<? extends Serializable> layout) {
-        super.setLayout(layout);
-        // PENDING IMPLEMENTATION
-    }
-    */
-
     protected MemAppender(String name, Filter filter, Layout<? extends Serializable> layout, List<LogEvent> logEventsList) {
         super(name, filter, layout);
         this.layout = layout;
