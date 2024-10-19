@@ -57,6 +57,7 @@ public class MemAppender extends AbstractAppender {
                 layout = VelocityLayout.createLayout(StandardCharsets.UTF_8, "[$p] $c $d: $m$n");
             }
             instance = new MemAppender(name, filter, layout, null);
+            instance.start(); // Ensure the appender is started (NEW)
         }
         return instance;
     }

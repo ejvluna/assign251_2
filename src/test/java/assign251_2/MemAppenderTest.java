@@ -58,7 +58,6 @@ public class MemAppenderTest {
         LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
         loggerConfig.removeAppender("TestMemAppender");
         context.updateLoggers();
-
         memAppender.stop();
         memAppender.getCurrentLogs().clear(); // Clear logs after each test
     }

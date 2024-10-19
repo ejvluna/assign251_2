@@ -37,6 +37,7 @@ public class VelocityLayout extends AbstractStringLayout {
         velocityEngine.init();
     }
 
+    /* 
     // Factory method to create and return the VelocityLayout instance
     @PluginFactory
     public static VelocityLayout createLayout(
@@ -44,10 +45,24 @@ public class VelocityLayout extends AbstractStringLayout {
             @PluginAttribute("pattern") String pattern) {
         return new VelocityLayout(charset, pattern);
     }
-   
-    // Method to set the pattern of the layout
+    */
+
+    @PluginFactory
+    public static VelocityLayout createLayout(
+            @PluginAttribute(value = "charset", defaultString = "UTF-8") Charset charset,
+            @PluginAttribute("pattern") String pattern) {
+        if (pattern == null) {
+            pattern = "[$p] $c $d: $m$n"; // Set default pattern if null
+        }
+        return new VelocityLayout(charset, pattern);
+    }
+    
     public void setPattern(String pattern) {
-        this.pattern = pattern;
+        if (pattern == null) {
+            this.pattern = "[$p] $c $d: $m$n"; // Default pattern
+        } else {
+            this.pattern = pattern;
+        }
     }
 
     // Method to get the pattern of the layout
@@ -55,7 +70,7 @@ public class VelocityLayout extends AbstractStringLayout {
         return pattern;
     }
 
-     @Override
+    @Override
     public String toSerializable(LogEvent event) {
         VelocityContext context = new VelocityContext();
         context.put("c", event.getLoggerName());
