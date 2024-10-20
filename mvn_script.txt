@@ -1,0 +1,1 @@
+mvn clean verify org.jacoco:jacoco-maven-plugin:report org.apache.maven.plugins:maven-dependency-plugin:analyze

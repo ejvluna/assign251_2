@@ -1,16 +1,13 @@
 package assign251_2;
 
 // Import the necessary classes
-import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.AbstractStringLayout;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -37,16 +34,7 @@ public class VelocityLayout extends AbstractStringLayout {
         velocityEngine.init();
     }
 
-    /* 
     // Factory method to create and return the VelocityLayout instance
-    @PluginFactory
-    public static VelocityLayout createLayout(
-            @PluginAttribute(value = "charset", defaultString = "UTF-8") Charset charset,
-            @PluginAttribute("pattern") String pattern) {
-        return new VelocityLayout(charset, pattern);
-    }
-    */
-
     @PluginFactory
     public static VelocityLayout createLayout(
             @PluginAttribute(value = "charset", defaultString = "UTF-8") Charset charset,

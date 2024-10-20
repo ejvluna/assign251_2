@@ -1,4 +1,4 @@
-package assign251_2; // Specify the package of the class
+package assign251_2; 
 
 // Import the necessary classes from the log4j library
 import org.apache.logging.log4j.core.Appender;
@@ -10,17 +10,14 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.core.Layout;
 import java.nio.charset.StandardCharsets;
-
 
 // Import other necessary classes
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 // Class to represent a memory appender
