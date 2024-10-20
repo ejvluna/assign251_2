@@ -41,12 +41,14 @@ public class MemAppender extends AbstractAppender {
     // A variable to store the layout of the MemAppender
     private Layout<? extends Serializable> layout;
 
+    // Constructor to initialize the MemAppender
     protected MemAppender(String name, Filter filter, Layout<? extends Serializable> layout, List<LogEvent> logEventsList) {
         super(name, filter, layout);
         this.layout = layout;
         this.logEvents = logEventsList != null ? logEventsList : new ArrayList<>();
     }
     
+    // Factory method to create and return the MemAppender instance
     @PluginFactory
     public static MemAppender createAppender(
             @PluginAttribute("name") String name,
@@ -62,10 +64,13 @@ public class MemAppender extends AbstractAppender {
         return instance;
     }
 
+
+    // Method to set the layout of the MemAppender
     public void setLayout(Layout<? extends Serializable> layout) {
         this.layout = layout;
     }
 
+    // Method to retrieve the layout of the MemAppender
     @Override
     public Layout<? extends Serializable> getLayout() {
         return this.layout;
@@ -113,6 +118,16 @@ public class MemAppender extends AbstractAppender {
         }
         logEvents.forEach(event -> System.out.println(getLayout().toSerializable(event)));
         logEvents.clear();
+    }
+
+    // New method for stress testing
+    public static MemAppender createAppenderForStressTest(
+            String name,
+            Layout<? extends Serializable> layout,
+            List<LogEvent> logEventsList) {
+        MemAppender appender = new MemAppender(name, null, layout, logEventsList);
+        appender.start();
+        return appender;
     }
 
      
