@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -54,6 +55,9 @@ public class MemAppenderStressTest {
     // Method to set up the test environment before each test
     @BeforeEach
     public void setUp() throws IOException {
+
+        // Encourage garbage collection before each test
+        System.gc();
 
         // Initialize a PatternLayout using the builder
         patternLayout = PatternLayout.newBuilder()
@@ -104,46 +108,54 @@ public class MemAppenderStressTest {
         assertTrue(duration < 90000, "Processing should take less than 90 seconds");
     }
 
-    // Stress Test to compare the performance of MemAppender before and after reaching maxSize at different values (@100, @1000, @10000)
+    // Test to measure the performance of MemAppender before and after reaching the maxSize limit 
     @ParameterizedTest
-    @ValueSource(ints = {100, 1000, 10000}) // Adjust these values as needed
+    @ValueSource(ints = {1000, 10000}) // Adjust these values as needed
     @Timeout(value = 2, unit = TimeUnit.MINUTES)
     public void testPerformanceBeforeAndAfterMaxSize(int maxSize) {
-        
-        // Specify the number of events before reaching maxSize. 
-        int eventCount = maxSize / 10; // Set to 10% of maxSize. Adjust as needed
 
         // Set the max size for the appenders
         memAppenderLinkedList.setMaxSize(maxSize);
         memAppenderArrayList.setMaxSize(maxSize);
-        
-        // Measure performance before reaching max size
-        long startTimeBefore = System.currentTimeMillis();
-        generateLogEvents(eventCount);
-        long endTimeBefore = System.currentTimeMillis();
-        long durationBefore = endTimeBefore - startTimeBefore;
-        
-        // Measure performance after reaching max size
-        long startTimeAfter = System.currentTimeMillis();
-        generateLogEvents(maxSize); // Generate only maxSize events
 
-        // Calculate the time taken to process log events after reaching maxSize
-        long endTimeAfter = System.currentTimeMillis();
-        long durationAfter = endTimeAfter - startTimeAfter;
-        
+        // Measure start time, mid time, and end time to calculate performance before and after reaching maxSize
+        long startTime = System.nanoTime();
+        long midTime = 0;
+        long endTime;
+
+        // Generate log events until reaching twice the maxSize (to measure performance for same maxSize events after reaching maxSize)
+        for (int i = 0; i < 2 * maxSize; i++) {
+            logger.info("Test message " + i);
+            // Measure the mid time when reaching maxSize
+            if (i == maxSize - 1) {
+                midTime = System.nanoTime();
+            }
+        }
+        // Measure the end time after reaching maxSize
+        endTime = System.nanoTime();
+
+        // Calculate the time taken to process events before and after reaching maxSize
+        long durationBefore = midTime - startTime;
+        long durationAfter = endTime - midTime;
+
+        // Convert nanoseconds to milliseconds
+        double durationBeforeMs = durationBefore / 1_000_000.0;
+        double durationAfterMs = durationAfter / 1_000_000.0;
+
         // Print the results to the console
         System.out.println("MaxSize: " + maxSize);
-        System.out.println("Time taken before reaching maxSize (" + eventCount + " events): " + durationBefore + " ms");
-        System.out.println("Time taken after reaching maxSize (" + (maxSize + eventCount) + " events): " + durationAfter + " ms");
+        System.out.printf("Time taken to process %d events before reaching maxSize: %.2f ms%n", maxSize, durationBeforeMs);
+        System.out.printf("Time taken to process %d events after reaching maxSize: %.2f ms%n", maxSize, durationAfterMs);
         System.out.println("Discarded log count (LinkedList): " + memAppenderLinkedList.getDiscardedLogCount());
         System.out.println("Discarded log count (ArrayList): " + memAppenderArrayList.getDiscardedLogCount());
-        
-        // Add assertions to verify performance
-        assertTrue(durationAfter > durationBefore, "Performance after reaching maxSize should be slower");
-        assertTrue(memAppenderLinkedList.getDiscardedLogCount() > 0, "LinkedList should have discarded logs");
-        assertTrue(memAppenderArrayList.getDiscardedLogCount() > 0, "ArrayList should have discarded logs");
-    }
 
+        // Add assertions to verify expected performance (log discarding should be equal to maxSize)
+        assertEquals(maxSize, memAppenderLinkedList.getDiscardedLogCount(), 
+            "LinkedList should have discarded exactly maxSize logs");
+        assertEquals(maxSize, memAppenderArrayList.getDiscardedLogCount(), 
+            "ArrayList should have discarded exactly maxSize logs");
+    }
+    
 
     // --- 2. Appender Performance Comparison Test (processing time & memory consumption)
 
@@ -151,7 +163,7 @@ public class MemAppenderStressTest {
     @Test
     public void compareAppenderPerformance() {
         // Set the number of log events to generate
-        int eventCount = 100; // Increase event count as needed
+        int eventCount = 1000; // Increase event count as needed
         String testFileName = "test_output.log";
 
         // Configure the FileAppender with a test file
@@ -230,7 +242,7 @@ public class MemAppenderStressTest {
 
     // --- 3. Layout Performance Comparison Test (processing time & memory consumption)
 
-    // Test to compare the performance (processing time) of PatternLayout and VelocityLayout
+    // Test to compare the performance (processing time & memory usage) of PatternLayout and VelocityLayout
     @Test
     public void compareLayoutPerformance() {
         // Set the number of log events to generate

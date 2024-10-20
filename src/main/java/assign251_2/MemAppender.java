@@ -14,6 +14,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.core.Layout;
 import java.nio.charset.StandardCharsets;
 
+
 // Import other necessary classes
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -128,6 +129,11 @@ public class MemAppender extends AbstractAppender {
         MemAppender appender = new MemAppender(name, null, layout, logEventsList);
         appender.start();
         return appender;
+    }
+
+    public void clear() {
+        logEvents.clear();
+        discardedLogCount = 0;
     }
 
      
