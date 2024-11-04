@@ -128,6 +128,7 @@ public class MemAppender extends AbstractAppender {
         return appender;
     }
 
+    // Method to clear the log events
     public void clear() {
         logEvents.clear();
         discardedLogCount = 0;

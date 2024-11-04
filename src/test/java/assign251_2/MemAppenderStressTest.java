@@ -38,7 +38,6 @@ public class MemAppenderStressTest {
     private PatternLayout patternLayout;
     private VelocityLayout velocityLayout;
     private Logger logger;
-    //private Layout<? extends Serializable> layout;
 
     // === Section 0. Methods to set up the test environment
 
@@ -87,13 +86,17 @@ public class MemAppenderStressTest {
         // Set the number of events to generate
         int eventCount = 100000; // Adjust this value as needed
         long startTime = System.currentTimeMillis();
+
         // Generate log events
         generateLogEvents(eventCount);
+
         // Measure the time taken to process the events
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
+
         // Print the results to the console
         System.out.println("Time taken to process " + eventCount + " events: " + duration + " ms");
+        
         // Add an assertion to verify the processing time meets the requirement (adjust as needed)
         assertTrue(duration < 90000, "Processing should take less than 90 seconds");
     }
@@ -296,7 +299,7 @@ public class MemAppenderStressTest {
 
     // === Additional Helper Methods
 
-    // Method to enable JMX profiler for monitoring the application via JConsole or VisualVM
+    // For monitoring the application via JConsole or VisualVM
     private void enableJMXProfiler() {
         try {
             java.lang.management.ManagementFactory.getPlatformMBeanServer();
@@ -357,7 +360,6 @@ public class MemAppenderStressTest {
         setupAppendersWithLayout(velocityLayout);
     }
 
-    // Utility method for generating logs, measuring performance, etc. will be added here
     private void generateLogEvents(int count) {
         for (int i = 0; i < count; i++) {
             LogEvent event = Log4jLogEvent.newBuilder()

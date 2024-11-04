@@ -45,6 +45,7 @@ public class VelocityLayout extends AbstractStringLayout {
         return new VelocityLayout(charset, pattern);
     }
     
+    // Method to set the pattern of the layout
     public void setPattern(String pattern) {
         if (pattern == null) {
             this.pattern = "[$p] $c $d: $m$n"; // Default pattern
@@ -58,6 +59,7 @@ public class VelocityLayout extends AbstractStringLayout {
         return pattern;
     }
 
+    // Override method to format the log event using the Velocity template
     @Override
     public String toSerializable(LogEvent event) {
         VelocityContext context = new VelocityContext();
